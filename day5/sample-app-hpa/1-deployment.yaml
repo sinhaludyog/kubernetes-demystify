@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-k8s-deployment
+
+spec:
+  replicas: 1
+
+  # selector: Label selector for pods. 
+  # Existing ReplicaSets whose pods are selected by this will be the ones affected by this deployment. 
+  # It must match the pod template's labels.
+  # A label selector is a label query over a set of resources. 
+  # An empty label selector matches all objects. A null label selector matches no objects.
+  selector:
+    # matchLabels is a map of {key,value} pairs. 
+    # A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", 
+    # the operator is "In", and the values array contains only "value".
+    matchLabels:
+      run: hpa-k8s
+
+  # Template describes the pods that will be created.
+  template:
+    metadata:
+      labels:
+        run: hpa-k8s
+    
+    # spec: Specification of the desired behavior of the pod.
+    spec:
+      # imagePullSecrets:
+      # - name: vps-registry-secret
+      
+      # containers: List of containers belonging to the pod.
+      containers:
+      - name: hpa-demo-app
+        image: vivek2508/k8s-demo:latest
+        ports:
+        - containerPort: 8080
+        
+        # resources: Compute Resources required by this container.
+        resources:
+          limits:
+            cpu: 500m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi

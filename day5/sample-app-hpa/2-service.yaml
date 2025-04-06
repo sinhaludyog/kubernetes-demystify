@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: hpa-k8s-deployment
+ labels:
+   run: hpa-k8s
+
+spec:
+ # ports: The list of ports that are exposed by this service. 
+ ports:
+ - port: 8080
+ 
+ # Route service traffic to pods with label keys and values matching this selector. 
+ # If empty or not present, the service is assumed to have an external process managing its endpoints, which Kubernetes will not modify. 
+ # Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type is ExternalName.
+ selector:
+   run: hpa-k8s

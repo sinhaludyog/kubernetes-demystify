@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-demo-pod
+  labels:
+    env: k8s-demo
+spec:
+  containers:
+  - name: k8s-demo-container
+    image: vivek2508/k8s-demo:latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: name
+            operator: In
+            values:
+            - node-affinity-test
