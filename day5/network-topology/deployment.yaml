@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-topology-deployment
+spec:
+  selector:
+    matchLabels:
+      app: k8s-demo
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: k8s-demo
+    spec:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              app: k8s-demo
+          maxSkew: 1
+          topologyKey: zone
+          # topologyKey: kubernetes.io/hostname          
+          whenUnsatisfiable: DoNotSchedule
+          # whenUnsatisfiable: ScheduleAnyway                         
+      containers:
+        - name: k8s-demo-container  
+          image: vivek2508/k8s-demo:latest
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "100m"
+            limits:
+              memory: "400Mi"
+              cpu: "300m"
